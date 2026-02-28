@@ -58,6 +58,9 @@ def create_licence(data: LicenceCreate, db: Session = Depends(get_db), current_u
     if current_user['club_id'] != data.club_id:
         raise HTTPException(status_code=403, detail="Accès interdit à ce club.")
 
+    if not current_user.get("federation"):
+        raise HTTPException(status_code=403, detail="Aucune fédération assignée.")
+
     saison_active = get_current_saison(db, current_user['federation']['id'])
     if not saison_active:
         raise HTTPException(status_code=400, detail="Aucune saison active.")
@@ -231,6 +234,8 @@ def get_licences(
     )
 
     if current_user["role"] == "admin_federation":
+        if not current_user.get("federation"):
+            return []
         federation_id = current_user["federation"]["id"]
         print(federation_id)
         query = query.join(models.Saison).filter(models.Saison.federation_id == federation_id)
@@ -276,6 +281,8 @@ def get_licence(licence_id: int, db: Session = Depends(get_db), current_user=Dep
     # Vérification droits d'accès
     user_role = current_user.get("role")
     if user_role == "admin_federation":
+        if not current_user.get("federation"):
+            raise HTTPException(status_code=403, detail="Aucune fédération assignée.")
         federation_id = current_user["federation"]["id"]
         if licence.saison.federation_id != federation_id:
             raise HTTPException(status_code=403, detail="Accès interdit à cette fédération.")

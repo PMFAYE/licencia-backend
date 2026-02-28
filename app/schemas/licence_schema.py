@@ -46,7 +46,7 @@ class LicenceFichier(BaseModel):
     chemin: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # -------------------------------------------------------------------
 # 🔍 Réponse complète
@@ -70,7 +70,7 @@ class LicenceResponse(BaseModel):
     date_refus: Optional[datetime] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         from_attributes = True
 
 # -------------------------------------------------------------------

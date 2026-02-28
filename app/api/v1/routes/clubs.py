@@ -90,7 +90,7 @@ def update_club(
     if not club:
         raise HTTPException(status_code=404, detail="Club non trouvé")
 
-    if current_user['role'] != "admin_federation" and current_user.club_id != club_id:
+    if current_user['role'] != "admin_federation" and current_user.get('club_id') != club_id:
         raise HTTPException(status_code=403, detail="Accès interdit")
 
     for key, value in club_data.dict(exclude_unset=True).items():
@@ -143,7 +143,7 @@ def update_club_infos(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user)
 ):
-    if current_user['role'] != "admin_federation" and current_user.club_id != club_id:
+    if current_user['role'] != "admin_federation" and current_user.get('club_id') != club_id:
         raise HTTPException(status_code=403, detail="Non autorisé")
 
     for item in data:

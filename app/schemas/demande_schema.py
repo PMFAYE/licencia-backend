@@ -38,4 +38,4 @@ class DemandeOut(BaseModel):
     licence_id: Optional[int]
 
     class Config:
-        orm_mode = True
+        from_attributes = True

@@ -9,21 +9,21 @@ class ClubBase(BaseModel):
     division: Optional[str] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class FederationBase(BaseModel):
     id: int
     nom: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class LigueBase(BaseModel):
     id: int
     nom: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class UserCreate(BaseModel):
@@ -49,7 +49,7 @@ class UserResponse(BaseModel):
     ligue: Optional[LigueBase] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class InvitationRequest(BaseModel):

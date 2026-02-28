@@ -51,6 +51,9 @@ class ClubOut(BaseModel):
     adresse: Optional[str]
     email: EmailStr
 
+    class Config:
+        from_attributes = True
+
 
 class ClubDetail(ClubOut):
     infos: List[ClubInfoBase] = []
