@@ -44,6 +44,7 @@ class UserResponse(BaseModel):
     email: Optional[str] = None
     club_id: Optional[int] = None
     role: Optional[str] = None
+    avatar_url: Optional[str] = None
     club: Optional[ClubBase] = None
     federation: Optional[FederationBase] = None
     ligue: Optional[LigueBase] = None
