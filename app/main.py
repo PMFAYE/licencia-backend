@@ -12,18 +12,17 @@ with engine.connect() as conn:
 
 models.Base.metadata.create_all(bind=engine)
 
+import os
+
 # Configuration CORS
-origins = [
-    "http://localhost:5173",      # ton frontend Vite/React
-    "http://127.0.0.1:5173",      # au cas où tu utilises 127.0.0.1
-    # Tu peux aussi ajouter "http://localhost:3000" si tu changes de port plus tard
-]
+frontend_urls = os.getenv("FRONTEND_URLS", "https://licencia-7a28e.firebaseapp.com,https://licencia-vitrine.firebaseapp.com,http://localhost:5173,http://localhost:5174")
+origins = [url.strip() for url in frontend_urls.split(",")]
 
 app = FastAPI(title="FSBB API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],          # ou spécifie les méthodes : ["GET", "POST", "PUT", "DELETE"]
     allow_headers=["*"],          # ou liste les headers autorisés
