@@ -5,6 +5,11 @@ psycopg2-binary
 alembic
 python-dotenv
 passlib[bcrypt]
+bcrypt
 python-jose
 pydantic-settings
 pydantic
+python-multipart
+pydantic[email]
+pydantic_core
+email-validator
