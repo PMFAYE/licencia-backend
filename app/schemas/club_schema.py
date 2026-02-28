@@ -50,6 +50,7 @@ class ClubOut(BaseModel):
     telephone: Optional[str] = None
     adresse: Optional[str] = None
     email: Optional[str] = None
+    logo_url: Optional[str] = None
 
     class Config:
         from_attributes = True
