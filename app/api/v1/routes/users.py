@@ -122,6 +122,7 @@ def list_users(db: Session = Depends(get_db), _: models.User = Depends(admin_req
 
     return [
         {
+            "id": user.id,
             "nom": user.nom,
             "prenom": user.prenom,
             "email": user.email,
@@ -129,6 +130,45 @@ def list_users(db: Session = Depends(get_db), _: models.User = Depends(admin_req
             "club": user.club.nom if user.club else None,
             "federation": user.federation.name if user.federation else None,
             "ligue": user.ligue.name if user.ligue else None,
+            "is_active": user.is_active if getattr(user, 'is_active', None) is not None else True
         }
         for user in users
     ]
+
+
+@router.delete("/invitations/{invitation_id}")
+def delete_invitation(
+    invitation_id: int,
+    db: Session = Depends(get_db),
+    _: models.User = Depends(admin_required)
+):
+    """Supprime une invitation (admin only)."""
+    invitation = db.query(models.Invitation).filter(models.Invitation.id == invitation_id).first()
+    if not invitation:
+        raise HTTPException(status_code=404, detail="Invitation non trouvée")
+    
+    db.delete(invitation)
+    db.commit()
+    return {"message": "Invitation supprimée avec succès"}
+
+
+@router.patch("/{user_id}/status")
+def toggle_user_status(
+    user_id: int,
+    db: Session = Depends(get_db),
+    _: models.User = Depends(admin_required)
+):
+    """Active ou désactive un utilisateur (admin only)."""
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
+    
+    # Toggle status
+    user.is_active = not getattr(user, "is_active", True)
+    db.commit()
+    db.refresh(user)
+    
+    return {
+        "message": f"Utilisateur {'activé' if user.is_active else 'désactivé'} avec succès",
+        "is_active": user.is_active
+    }

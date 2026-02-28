@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 from app.db import models
 from app.db.database import engine
 from app.api.v1.routes import auth, users, licences, clubs, clubs_infos_type, federation, demande, adherents, notifications, ws, offres, devis
@@ -15,8 +16,18 @@ models.Base.metadata.create_all(bind=engine)
 import os
 
 # Configuration CORS
-frontend_urls = os.getenv("FRONTEND_URLS", "https://licencia-7a28e.firebaseapp.com,https://licencia-vitrine.firebaseapp.com,http://localhost:5173,http://localhost:5174")
-origins = [url.strip() for url in frontend_urls.split(",")]
+production_origins = [
+    "https://licencia-7a28e.firebaseapp.com",
+    "https://licencia-7a28e.web.app",
+    "https://licencia-vitrine.firebaseapp.com",
+    "https://licencia-vitrine.web.app",
+]
+localhost_origins = [
+     "http://localhost:5173",
+     "http://localhost:5174",
+]
+env_origins = os.getenv("FRONTEND_URLS", "").split(",")
+origins = list(set([url.strip() for url in production_origins + localhost_origins + env_origins if url.strip()]))
 
 app = FastAPI(title="FSBB API")
 
@@ -24,14 +35,18 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],          # ou spécifie les méthodes : ["GET", "POST", "PUT", "DELETE"]
-    allow_headers=["*"],          # ou liste les headers autorisés
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"],
 )
+
+app.add_middleware(ProxyHeadersMiddleware, trusted_hosts="*")
+print(f"DEBUG: Allowed Origins: {origins}")
 
 import os
 
 # Create the uploads directory if it doesn't exist
-UPLOAD_DIR = os.getenv("UPLOAD_DIR", "/tmp/ged")
+UPLOAD_DIR = os.getenv("UPLOAD_DIR") or "/tmp/ged"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")

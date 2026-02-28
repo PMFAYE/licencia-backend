@@ -327,7 +327,7 @@ async def upload_fichier(
 
     # Répertoire sécurisé
     import os
-    upload_dir = os.getenv("UPLOAD_DIR", "/tmp/ged")
+    upload_dir = os.getenv("UPLOAD_DIR") or "/tmp/ged"
     base_path = Path(f"{upload_dir}/{org_id}/{club_id}/{type}")
     base_path.mkdir(parents=True, exist_ok=True)
 

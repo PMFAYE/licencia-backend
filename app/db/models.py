@@ -54,6 +54,7 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     role = Column(String, default="user")
     avatar_url = Column(String, nullable=True)
+    is_active = Column(Boolean, default=True)
 
     club_id = Column(Integer, ForeignKey("fsbb.clubs.id"))
     federation_id = Column(Integer, ForeignKey('fsbb.federations.id'), nullable=True)
