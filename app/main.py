@@ -4,6 +4,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.db import models
 from app.db.database import engine
 from app.api.v1.routes import auth, users, licences, clubs, clubs_infos_type, federation, demande, adherents, notifications, ws, offres, devis
+from sqlalchemy import text
+
+with engine.connect() as conn:
+    conn.execute(text("CREATE SCHEMA IF NOT EXISTS fsbb"))
+    conn.commit()
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -24,7 +29,14 @@ app.add_middleware(
     allow_headers=["*"],          # ou liste les headers autorisés
 )
 
-app.mount("/home/pfaye/mvp/ged", StaticFiles(directory="/home/pfaye/mvp/ged"), name="uploads")
+import os
+
+# Create the uploads directory if it doesn't exist
+UPLOAD_DIR = os.getenv("UPLOAD_DIR", "/tmp/ged")
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
+
 # Inclure les routes
 app.include_router(auth.router)
 app.include_router(users.router)

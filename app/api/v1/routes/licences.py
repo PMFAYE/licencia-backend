@@ -319,8 +319,11 @@ async def upload_fichier(
         raise HTTPException(status_code=400, detail="Type de fichier invalide.")
 
     # Répertoire sécurisé
-    base_path = Path(f"/home/pfaye/mvp/ged/{org_id}/{club_id}/{type}")
+    import os
+    upload_dir = os.getenv("UPLOAD_DIR", "/tmp/ged")
+    base_path = Path(f"{upload_dir}/{org_id}/{club_id}/{type}")
     base_path.mkdir(parents=True, exist_ok=True)
+
 
     # Création en base
     nouveau_fichier = models.Fichier(
