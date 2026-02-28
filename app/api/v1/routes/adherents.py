@@ -27,7 +27,6 @@ def list_adherents(club_id: int, db: Session = Depends(get_db), user=Depends(get
         .filter(models.Adherent.club_id == club_id)
         .all()
     )
-    print(adherents[0])
     return [
         AdherentOut(
             id=ad.id,

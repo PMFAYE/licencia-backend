@@ -85,7 +85,7 @@ def update_statut(
 
     return db_demande
 
-@router.get("/{demande_id}")
+@router.get("/{demande_id}", response_model=DemandeOut)
 def read_demande(demande_id: int, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
     db_demande = (
         db.query(models.Demande)
@@ -102,7 +102,7 @@ def read_demande(demande_id: int, db: Session = Depends(get_db), current_user=De
     # tu peux vérifier que l'utilisateur appartient au même club ou a les droits
     return db_demande
 
-@router.get("/")
+@router.get("/", response_model=List[DemandeOut])
 def list_demandes(db: Session = Depends(get_db), current_user=Depends(get_current_user)):
     # selon rôle, tu filtres les demandes visibles
     if current_user['role'] == "admin_federation":

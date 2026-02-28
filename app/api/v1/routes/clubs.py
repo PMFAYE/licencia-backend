@@ -7,7 +7,7 @@ from datetime import date
 
 from app.db import models
 from app.db.database import get_db
-from app.schemas.club_schema import ClubOut, ClubDetail, ClubCreate
+from app.schemas.club_schema import ClubOut, ClubDetail, ClubCreate, ClubInfoTypeBase
 from app.api.v1.routes.users import get_current_user
 
 router = APIRouter(prefix="/clubs", tags=["Clubs"])
@@ -161,7 +161,7 @@ def update_club_infos(
     return {"message": "Infos mises à jour"}
 
 
-@router.get("/clubs_infos_type")
+@router.get("/clubs_infos_type", response_model=List[ClubInfoTypeBase])
 def get_all_infos_types(db: Session = Depends(get_db)):
     types = db.query(models.ClubInfoType).all()
     return types

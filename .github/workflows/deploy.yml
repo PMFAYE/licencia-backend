@@ -26,4 +26,4 @@ jobs:
             --source ./ \
             --region ${{ env.REGION }} \
             --allow-unauthenticated \
-            --set-env-vars "DATABASE_URL=${{ secrets.DATABASE_URL }},JWT_SECRET=${{ secrets.JWT_SECRET }},JWT_ALGORITHM=${{ vars.JWT_ALGORITHM }},ACCESS_TOKEN_EXPIRE_MINUTES=${{ vars.ACCESS_TOKEN_EXPIRE_MINUTES }}"
+            --set-env-vars "DATABASE_URL=${{ secrets.DATABASE_URL }},JWT_SECRET=${{ secrets.JWT_SECRET }},JWT_ALGORITHM=${{ vars.JWT_ALGORITHM }},ACCESS_TOKEN_EXPIRE_MINUTES=${{ vars.ACCESS_TOKEN_EXPIRE_MINUTES }},FRONTEND_URLS=${{ vars.FRONTEND_URLS }}"

@@ -14,7 +14,7 @@ class AdherentBase(BaseModel):
     prenom: str
     date_naissance: datetime
     genre: Optional[str] = None
-    email: Optional[EmailStr] = None
+    email: Optional[str] = None
     telephone: Optional[str] = None
     actif: Optional[bool] = True
 

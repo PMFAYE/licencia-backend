@@ -297,7 +297,7 @@ def get_licence(licence_id: int, db: Session = Depends(get_db), current_user=Dep
         date_naissance=licence.date_naissance,
         categorie=licence.categorie.nom if licence.categorie else None,
         statut=licence.statut,
-        documents=[{"id": f.id, "nom_fichier": f.nom_fichier, "type": f.type.nom if f.type else None, "chemin": f.chemin} for f in licence.fichiers] if licence.fichiers else [],
+        documents=[{"id": f.id, "nom_fichier": f.nom_fichier, "type": f.type.nom if f.type else "Document", "chemin": f.chemin} for f in licence.fichiers] if licence.fichiers else [],
         motif_rejet=licence.commentaire_refus,
         club_id=licence.club_id,
         date_creation=licence.date_creation,

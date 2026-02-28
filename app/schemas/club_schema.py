@@ -44,12 +44,12 @@ class ClubInfoBase(BaseModel):
 # ----------------------------
 class ClubOut(BaseModel):
     id: int
-    nom: str
-    raison_sociale: Optional[str]
-    division: Optional[str]
-    telephone: Optional[str]
-    adresse: Optional[str]
-    email: EmailStr
+    nom: Optional[str] = None
+    raison_sociale: Optional[str] = None
+    division: Optional[str] = None
+    telephone: Optional[str] = None
+    adresse: Optional[str] = None
+    email: Optional[str] = None
 
     class Config:
         from_attributes = True

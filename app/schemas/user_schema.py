@@ -39,9 +39,9 @@ class UserCreate(BaseModel):
 
 class UserResponse(BaseModel):
     id: int
-    nom: str
-    prenom: str
-    email: EmailStr
+    nom: Optional[str] = None
+    prenom: Optional[str] = None
+    email: Optional[str] = None
     club_id: Optional[int] = None
     role: Optional[str] = None
     club: Optional[ClubBase] = None
